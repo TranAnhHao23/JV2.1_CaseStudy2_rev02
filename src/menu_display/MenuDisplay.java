@@ -7,6 +7,7 @@ import model.Account;
 import model.Computer;
 import model.Service;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MenuDisplay {
@@ -24,15 +25,16 @@ public class MenuDisplay {
             System.out.println("             CHÀO MỪNG QUAY LẠI");
             System.out.println("----------PHẦN MỀM QUẢN LÝ PHÒNG MÁY----------");
             System.out.println("1. Hiển thị danh sách máy có trong quán"); // ok, thêm máy on máy off
-            System.out.println("2. Thêm một máy mới vào danh sách"); // ok
-            System.out.println("3. Sửa thông tin một máy trong danh sách"); // ok
-            System.out.println("4. Xóa một máy trong danh sách"); // ok
-            System.out.println("5. Quản lý dịch vụ"); // ok
-            System.out.println("6. Chỉnh sửa tính tiền theo giờ"); // ok
-            System.out.println("7. Tính tiền máy"); //
-            System.out.println("8. Quản lý tài khoản đăng nhập"); // ok
-            System.out.println("9. Quản lý doanh thu"); //
-            System.out.println("10. Về menu đăng nhập"); // ok
+            System.out.println("2. Bật máy, tính tiền"); // ok, done
+            System.out.println("3. Thêm một máy mới vào danh sách"); // ok
+            System.out.println("4. Sửa thông tin một máy trong danh sách"); // ok
+            System.out.println("5. Xóa một máy trong danh sách"); // ok
+            System.out.println("6. Quản lý dịch vụ"); // ok
+            System.out.println("7. Chỉnh sửa tính tiền theo giờ"); // ok
+            System.out.println("8. Tính tiền máy"); // ok
+            System.out.println("9. Quản lý tài khoản đăng nhập"); // ok
+            System.out.println("10. Quản lý doanh thu"); //
+            System.out.println("11. Về menu đăng nhập"); // ok
             System.out.println("0. Thoát ứng dụng"); // ok
             System.out.println("-----------------------------------------------");
             choice = scanner.nextInt();
@@ -50,43 +52,51 @@ public class MenuDisplay {
                     } else {
                         System.out.println("Chưa có xiền mua máy");
                     }
-
                     break;
                 case 2:
+                    System.out.println("Các máy đang online: ");
+                    System.out.println(onlineComputer());
+                    System.out.println("Các máy đang offline: ");
+                    System.out.println(offlineComputer());
+                    System.out.print("Nhập máy muốn bật: ");
+                    int idTurnOn = scanner.nextInt();
+                    cyberManager.turnOnComputer(idTurnOn);
+                    break;
+                case 3:
                     System.out.print("Nhập ID máy để thêm vào nào: ");
                     int idAdd = scanner.nextInt();
                     cyberManager.addComputer(idAdd);
                     break;
-                case 3:
+                case 4:
                     System.out.print("Nhập ID máy để sửa tý thông tin nào: ");
                     int idUpdate = scanner.nextInt();
                     System.out.print("Nhập ID mới để cập nhật: ");
                     int idNew = scanner.nextInt();
                     cyberManager.updateComputerByID(idUpdate, idNew);
                     break;
-                case 4:
+                case 5:
                     System.out.print("Nhập ID máy để xóa nào: ");
                     int idDelete = scanner.nextInt();
                     cyberManager.deleteComputerByID(idDelete);
                     break;
-                case 5:
+                case 6:
                     menuServices();
                     break;
-                case 6:
+                case 7:
                     System.out.print("Thay đổi tý tiền tăng doanh thu nào: ");
                     double priceNew = scanner.nextDouble();
                     cyberManager.changePlayPrice(priceNew);
                     break;
-                case 7:
-                    totalPay();
-                    break;
                 case 8:
-                    menuAccountManager();
-                    break;
-                case 9:
                     menuRevenue();
                     break;
+                case 9:
+                    menuAccountManager();
+                    break;
                 case 10:
+                    totalPay();
+                    break;
+                case 11:
                     System.out.println("Căm bách về menu đăng nhập nhớ");
                     break;
                 case 0:
@@ -96,7 +106,7 @@ public class MenuDisplay {
                     System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
                     break;
             }
-        } while (choice != 10);
+        } while (choice != 11);
     }
 
     public void menuAccountManager() {
@@ -207,9 +217,24 @@ public class MenuDisplay {
             scanner.nextLine();
             switch (menuRevenueChoice) {
                 case 1:
-
+                    System.out.print("Nhập ID máy muốn thêm dịch vụ: ");
+                    int idAddServices = scanner.nextInt();
+                    scanner.nextLine();
+                    if (onlineComputer().contains(String.valueOf(idAddServices))) {
+//                        selectService();
+                        cyberManager.addServiceToComputer(idAddServices, selectService());
+                    } else {
+                        System.out.println("Máy đang offline bạn ôi");
+                    }
+                    break;
                 case 2:
-
+                    System.out.print("Nhập ID muốn thanh toán: ");
+                    int idPayment = scanner.nextInt();
+                    scanner.nextLine();
+                    if (onlineComputer().contains(String.valueOf(idPayment))){
+                        System.out.println("Tổng tiền phải thanh toán là: " + cyberManager.turnOffComputer(idPayment));
+                    }
+                    break;
                 case 0:
                     System.out.println("Bái bai");
                     break;
@@ -220,33 +245,58 @@ public class MenuDisplay {
         } while (menuRevenueChoice != 0);
     }
 
+    private Service selectService() {
+        int choice;
+        Service serviceAdd = null;
+        for (Service service : serviceManager.displayService()) {
+            System.out.println(service);
+        }
+        System.out.print("Bạn muốn chọn dịch vụ nào: ");
+        String nameService = scanner.nextLine();
+        System.out.println("Số lượng bao nhiêu nhở?");
+        int quantity = scanner.nextInt();
+        for (Service service : serviceManager.displayService()) {
+            if (service.getName().equals(nameService)) {
+                serviceAdd = service;
+                serviceAdd.setQuantity(quantity);
+                System.out.println("Thêm thành công");
+                break;
+            }
+        }
+        if (serviceAdd == null) {
+            System.out.println("Bạn nhập sai rồi đó");
+        }
+        System.out.println("Bạn muốn thêm gì nữa không. Nhấn 1 để thêm, nhấn 0 để thoát");
+        return serviceAdd;
+    }
+
     public void totalPay() {
 
     }
 
-    public StringBuilder onlineComputer() {
-        StringBuilder output = new StringBuilder();
+    public String onlineComputer() {
+        String output = "";
         for (Computer computer : cyberManager.displayComputers()) {
             if (computer.getStatus().equals("Available")) {
-                output.append(computer.getId()).append(" ");
+                output += computer.getId() + " ";
             }
         }
         if (output.length() == 0) {
-            return new StringBuilder("Không có máy nào đang bật");
+            return "Không có máy nào đang bật";
         } else {
             return output;
         }
     }
 
-    public StringBuilder offlineComputer() {
-        StringBuilder output = new StringBuilder();
+    public String offlineComputer() {
+        String output = "";
         for (Computer computer : cyberManager.displayComputers()) {
             if (computer.getStatus().equals("Disable")) {
-                output.append(computer.getId()).append(" ");
+                output += computer.getId() + " ";
             }
         }
         if (output.length() == 0) {
-            return new StringBuilder("Không có máy nào đang tắt");
+            return "Không có máy nào đang tắt";
         } else {
             return output;
         }

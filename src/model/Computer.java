@@ -6,6 +6,7 @@ public class Computer {
     private long startTime;
     private long endTime;
     public static double playPrice = 15000;
+    private double serviceCash = 0;
 
     public Computer() {
     }
@@ -68,12 +69,12 @@ public class Computer {
         return (endTime - startTime) * playPrice;
     }
 
-    public double serviceCash(Service service) {
-        return service.getPrice() * service.getQuantity();
+    public void setServiceCash(double serviceCash) {
+        this.serviceCash += serviceCash;
     }
 
-    public double totalCash(Service service) {
-        return playPrice + serviceCash(service);
+    public double totalCash() {
+        return playCash() + serviceCash;
     }
 
     @Override
@@ -86,4 +87,18 @@ public class Computer {
                 ", playPrice = " + playPrice +
                 '}';
     }
+//    public class DailyRevenue{
+//        private String date;
+//        private double revenue;
+//
+//        public DailyRevenue() {
+//        }
+//
+//        public DailyRevenue(String date, double revenue) {
+//            this.date = date;
+//            this.revenue = revenue;
+//        }
+//
+//
+//    }
 }

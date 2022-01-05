@@ -1,8 +1,10 @@
 package manage;
 
 import model.Computer;
+import model.Service;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class CyberManager {
@@ -26,18 +28,18 @@ public class CyberManager {
         }
     }
 
-    public void updateComputerByID(int id, int idNew){
+    public void updateComputerByID(int id, int idNew) {
         if (checkIDComputer(id)) {
-            if (!checkIDComputer(idNew)){
-                for (Computer computer:computers) {
-                    if (computer.getId() == id){
+            if (!checkIDComputer(idNew)) {
+                for (Computer computer : computers) {
+                    if (computer.getId() == id) {
                         computer.setId(idNew);
                         writeComputerToCSV(computers);
                         System.out.println("Cập nhật thành công");
                         break;
                     }
                 }
-            } else{
+            } else {
                 System.out.println("ID mới trùng với ID máy trong danh sách");
             }
         } else {
@@ -45,10 +47,10 @@ public class CyberManager {
         }
     }
 
-    public void deleteComputerByID(int id){
-        if (checkIDComputer(id)){
-            for (Computer computer:computers) {
-                if (computer.getId() == id){
+    public void deleteComputerByID(int id) {
+        if (checkIDComputer(id)) {
+            for (Computer computer : computers) {
+                if (computer.getId() == id) {
                     computers.remove(computer);
                     writeComputerToCSV(computers);
                     System.out.println("Xóa thành công");
@@ -60,8 +62,8 @@ public class CyberManager {
         }
     }
 
-    public void changePlayPrice(double price){
-        if (price == Computer.playPrice){
+    public void changePlayPrice(double price) {
+        if (price == Computer.playPrice) {
             System.out.println("Trùng rồi thì thay làm gì?");
         } else {
             Computer.playPrice = price;
@@ -70,7 +72,56 @@ public class CyberManager {
         writeComputerToCSV(computers);
     }
 
+    public void addServiceToComputer(int id, Service serviceAdd) {
+        for (Computer computer : computers) {
+            if (computer.getId() == id) {
+                computer.setServiceCash(serviceAdd.getPrice() * serviceAdd.getQuantity());
+//                System.out.println(computer.totalCash());
+            }
+        }
+    }
 
+    public void turnOnComputer(int id) {
+//        double totalCash = 0;
+        if (checkIDComputer(id)) {
+            for (Computer computer : computers) {
+                if (computer.getId() == id) {
+                    if (computer.getStatus().equals("Disable")) {
+                        computer.setStatus("Available");
+                        computer.setStartTime(System.currentTimeMillis() / 60000);
+                        System.out.println(computer.getStatus());
+                        System.out.println("Đã mở máy, chơi đi bạn");
+                        writeComputerToCSV(computers);
+                        break;
+                    } else {
+                        System.out.println("Máy đang bật, không bật được lần nữa đâu");
+                    }
+                }
+            }
+        } else {
+            System.out.println("Không có ID máy trong hệ thống");
+        }
+    }
+
+    public double turnOffComputer(int id) {
+        double totalCash = 0;
+        if (checkIDComputer(id)) {
+            for (Computer computer : computers) {
+                if (computer.getId() == id) {
+                    if (computer.getStatus().equals("Available")) {
+                        computer.setStatus("Disable");
+                        computer.setEndTime(System.currentTimeMillis() / 60000);
+                        totalCash = computer.totalCash();
+                        computer.setStartTime(0);
+                        computer.setEndTime(0);
+                        writeComputerToCSV(computers);
+                        break;
+                    }
+                }
+            }
+        }
+        return totalCash;
+    }
 
 
     public void writeComputerToCSV(ArrayList<Computer> computerList) {
