@@ -64,7 +64,7 @@ public class MenuRevenue {
         }
         System.out.print("Bạn muốn chọn dịch vụ nào: ");
         int idService = scanner.nextInt();
-        System.out.println("Số lượng bao nhiêu nhở?");
+        System.out.print("Số lượng bao nhiêu nhở? ");
         int quantity = scanner.nextInt();
         for (Service service : serviceManager.displayService()) {
             if (service.getId() == idService) {

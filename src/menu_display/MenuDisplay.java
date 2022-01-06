@@ -2,6 +2,7 @@ package menu_display;
 
 import manage.AccountManager;
 import manage.CyberManager;
+import manage.RevenueManager;
 import manage.ServiceManager;
 import model.Computer;
 
@@ -12,6 +13,7 @@ public class MenuDisplay {
     public static CyberManager cyberManager = new CyberManager();
     public static AccountManager accountManager = new AccountManager();
     public static ServiceManager serviceManager = new ServiceManager();
+    public static RevenueManager revenueManager = new RevenueManager();
 
     public MenuDisplay() {
     }
@@ -52,7 +54,7 @@ public class MenuDisplay {
                     break;
                 case 12:
                     System.out.println("Hiển thị 1 máy cụ thể");
-                    System.out.println("Nhập ID máy: ");
+                    System.out.print("Nhập ID máy: ");
                     int idShow = scanner.nextInt();
                     scanner.nextLine();
                     System.out.println(cyberManager.displayComputerByID(idShow));
@@ -82,7 +84,7 @@ public class MenuDisplay {
                 case 5:
                     System.out.print("Nhập ID máy để xóa nào: ");
                     int idDelete = scanner.nextInt();
-                    System.out.println("Bạn có chắc chắn muốn xóa? Bấm 1 để xóa - Bấm 0 để thôi");
+                    System.out.print("Bạn có chắc chắn muốn xóa? Bấm 1 để xóa - Bấm 0 để thôi: ");
                     int deleteSelect = scanner.nextInt();
                     cyberManager.deleteComputerByID(idDelete, deleteSelect);
                     break;
@@ -104,6 +106,7 @@ public class MenuDisplay {
                     menuAccountManager.menuAccountManager();
                     break;
                 case 10:
+                    revenueManager.addRevenue();
                     totalPay();
                     break;
                 case 11:
@@ -123,29 +126,41 @@ public class MenuDisplay {
         int menuTotalPayChoice;
         do {
             System.out.println("1. Tổng doanh thu từ đầu");
-            System.out.println("2. Tổng doanh thu theo ngày");
+            System.out.println("2. Chốt doanh thu ngày hôm nay");
+            System.out.println("3. Tổng doanh thu theo ngày");
             System.out.println("0.Quay lại");
             System.out.println("------------------");
             System.out.print("Chọn đi nào: ");
             menuTotalPayChoice = scanner.nextInt();
             scanner.nextLine();
-            switch (menuTotalPayChoice){
+            switch (menuTotalPayChoice) {
                 case 1:
-
+                    System.out.println(revenueManager.totalRevenue());
+                    ;
                     break;
                 case 2:
-
+                    System.out.println(revenueManager.revenueToday());
+                    ;
                     break;
+                case 3:
+                    System.out.print("Từ ngày (dd/MM/yyyy): ");
+                    String dateStart = scanner.nextLine();
+                    System.out.print("Đến ngày (dd/MM/yyyy): ");
+                    String dateEnd = scanner.nextLine();
+                    double revenuePeriod = revenueManager.revenuePeriod(dateStart, dateEnd);
+                    if (revenuePeriod == -1 || dateStart.compareTo(dateEnd) >= 0) {
+                        System.out.println("Có gì đó sai sai?");
+                    } else {
+                        System.out.println("Doanh thu từ " + dateStart + " đến " + dateEnd + " là: " + revenuePeriod);
+                    }
                 case 0:
                     System.out.println("Bái bai");
                     break;
                 default:
                     System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
                     break;
-
             }
         } while (menuTotalPayChoice != 0);
-
     }
 
     public String onlineComputer() {
@@ -177,6 +192,5 @@ public class MenuDisplay {
             return output;
         }
     }
-
 
 }

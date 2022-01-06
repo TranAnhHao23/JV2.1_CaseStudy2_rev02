@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class CyberManager {
     private static final String PATH_COMPUTER = "src/IOfile/databaseComputers.csv";
     ArrayList<Computer> computers = readComputerToCSV();
+    public double dailyRevenue = 0;
 
     public CyberManager() {
     }
@@ -20,7 +21,7 @@ public class CyberManager {
     public String displayComputerByID(int id) {
         if (checkIDComputer(id)) {
             for (Computer computer : computers) {
-                if (computer.getId()==id){
+                if (computer.getId() == id) {
                     return computer.displayPlayTime();
                 }
             }
@@ -130,6 +131,7 @@ public class CyberManager {
                         computer.setEndTime(0);
                         computer.setServiceCash(0);
                         writeComputerToCSV(displayComputers());
+                        dailyRevenue += totalCash;
                         break;
                     }
                 }
@@ -151,7 +153,6 @@ public class CyberManager {
             System.err.println(e.getMessage());
         }
     }
-
     public ArrayList<Computer> readComputerToCSV() {
         ArrayList<Computer> computerList = new ArrayList<>();
         File file = new File(PATH_COMPUTER);

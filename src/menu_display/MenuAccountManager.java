@@ -31,12 +31,12 @@ public class MenuAccountManager {
 
                     break;
                 case 2:
-                    System.out.println("Nhập userName cần sửa");
+                    System.out.print("Nhập userName cần sửa: ");
                     String userNameUpdate = scanner.nextLine();
                     accountManager.updateAccountManager(userNameUpdate);
                     break;
                 case 3:
-                    System.out.println("Nhập userName cần xóa");
+                    System.out.print("Nhập userName cần xóa: ");
                     String userNameDelete = scanner.nextLine();
                     accountManager.deleteAccount(userNameDelete);
                     break;
