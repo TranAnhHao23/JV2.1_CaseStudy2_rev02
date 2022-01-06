@@ -73,7 +73,7 @@ public class ServiceManager {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_SERVICE));
             for (Service service : serviceList) {
-                bufferedWriter.write(service.getName() + "," + service.getPrice());
+                bufferedWriter.write(service.getId() + "," + service.getName()+ "," + service.getPrice());
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();
@@ -97,7 +97,7 @@ public class ServiceManager {
                 String line = "";
                 while ((line = bufferedReader.readLine()) != null) {
                     String[] output = line.split(",");
-                    serviceList.add(new Service(output[0], Double.parseDouble(output[1])));
+                    serviceList.add(new Service(output[1], Double.parseDouble(output[2])));
                 }
             } catch (IOException e) {
                 System.err.println(e.getMessage());

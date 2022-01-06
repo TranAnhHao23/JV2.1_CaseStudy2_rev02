@@ -1,6 +1,8 @@
 package model;
 
 public class Service {
+    private static int ID = 1;
+    private int id;
     private String name;
     private double price;
     private int quantity;
@@ -9,8 +11,17 @@ public class Service {
     }
 
     public Service(String name, double price) {
+        this.id = ID++;
         this.name = name;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -40,18 +51,19 @@ public class Service {
     @Override
     public String toString() {
         return "Service{" +
-                "name = " + name +
-                ", price = " + price +
-//                ", quantity = " + quantity +
-                " }";
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+//                ", quantity=" + quantity +
+                '}';
     }
 
     public String displayQuantity() {
         return "Service{" +
-                "name = " + name +
-                ", price = " + price +
-                ", quantity = " + quantity +
-                " }";
-
+                id + ". " +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
     }
 }

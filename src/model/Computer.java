@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+
 public class Computer {
     private int id;
     private String status;
@@ -87,6 +89,23 @@ public class Computer {
                 ", playPrice = " + playPrice +
                 '}';
     }
+
+    public String displayPlayTime() {
+        if (status.equals("Disable")){
+            return toString();
+        } else {
+            return "Computer {" +
+                    "id = " + id +
+                    ", status = " + status +
+                    ", startTime = " + startTime +
+                    ", durationTime = " + (System.currentTimeMillis()/60000 - startTime) +
+                    ", playFee = " + playPrice*(System.currentTimeMillis()/60000 - startTime) +
+                    ", servicesFee = " + serviceCash +
+                    '}';
+        }
+    }
+
+
 //    public class DailyRevenue{
 //        private String date;
 //        private double revenue;

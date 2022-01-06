@@ -3,18 +3,15 @@ package menu_display;
 import manage.AccountManager;
 import manage.CyberManager;
 import manage.ServiceManager;
-import model.Account;
 import model.Computer;
-import model.Service;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MenuDisplay {
     Scanner scanner = new Scanner(System.in);
-    CyberManager cyberManager = new CyberManager();
-    AccountManager accountManager = new AccountManager();
-    ServiceManager serviceManager = new ServiceManager();
+    public static CyberManager cyberManager = new CyberManager();
+    public static AccountManager accountManager = new AccountManager();
+    public static ServiceManager serviceManager = new ServiceManager();
 
     public MenuDisplay() {
     }
@@ -53,6 +50,14 @@ public class MenuDisplay {
                         System.out.println("Chưa có xiền mua máy");
                     }
                     break;
+                case 12:
+                    System.out.println("Hiển thị 1 máy cụ thể");
+                    System.out.println("Nhập ID máy: ");
+                    int idShow = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.println(cyberManager.displayComputerByID(idShow));
+                    break;
+
                 case 2:
                     System.out.println("Các máy đang online: ");
                     System.out.println(onlineComputer());
@@ -77,10 +82,13 @@ public class MenuDisplay {
                 case 5:
                     System.out.print("Nhập ID máy để xóa nào: ");
                     int idDelete = scanner.nextInt();
-                    cyberManager.deleteComputerByID(idDelete);
+                    System.out.println("Bạn có chắc chắn muốn xóa? Bấm 1 để xóa - Bấm 0 để thôi");
+                    int deleteSelect = scanner.nextInt();
+                    cyberManager.deleteComputerByID(idDelete, deleteSelect);
                     break;
                 case 6:
-                    menuServices();
+                    MenuService menuService = new MenuService();
+                    menuService.menuServices();
                     break;
                 case 7:
                     System.out.print("Thay đổi tý tiền tăng doanh thu nào: ");
@@ -88,10 +96,12 @@ public class MenuDisplay {
                     cyberManager.changePlayPrice(priceNew);
                     break;
                 case 8:
-                    menuRevenue();
+                    MenuRevenue menuRevenue = new MenuRevenue();
+                    menuRevenue.menuRevenue();
                     break;
                 case 9:
-                    menuAccountManager();
+                    MenuAccountManager menuAccountManager = new MenuAccountManager();
+                    menuAccountManager.menuAccountManager();
                     break;
                 case 10:
                     totalPay();
@@ -109,178 +119,43 @@ public class MenuDisplay {
         } while (choice != 11);
     }
 
-    public void menuAccountManager() {
-        int menuAccountChoice;
-        do {
-            System.out.println("1. Hiển thị tất cả tài khoản quản lý");
-            System.out.println("2. Sửa một tài khoản quản lý");
-            System.out.println("3. Xóa một tài khoản quản lý");
-            System.out.println("4. Thêm một tài khoản quản lý");
-            System.out.println("0. Thoát");
-            System.out.println("------------------------------------");
-            System.out.print("Chọn đi nào: ");
-            menuAccountChoice = scanner.nextInt();
-            scanner.nextLine();
-            switch (menuAccountChoice) {
-                case 1:
-                    for (Account account : accountManager.displayAccountManager()) {
-                        System.out.println(account);
-                    }
-
-                    break;
-                case 2:
-                    System.out.println("Nhập userName cần sửa");
-                    String userNameUpdate = scanner.nextLine();
-                    accountManager.updateAccountManager(userNameUpdate);
-                    break;
-                case 3:
-                    System.out.println("Nhập userName cần xóa");
-                    String userNameDelete = scanner.nextLine();
-                    accountManager.deleteAccount(userNameDelete);
-                    break;
-                case 4:
-                    System.out.print("userName thêm mới: ");
-                    String userNameAdd = scanner.nextLine();
-                    System.out.print("password đi: ");
-                    String password = scanner.nextLine();
-                    accountManager.addAccountManager(userNameAdd, password);
-                    break;
-                case 0:
-                    System.out.println("Bái bai");
-                    break;
-                default:
-                    System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
-                    break;
-            }
-        } while (menuAccountChoice != 0);
-    }
-
-    public void menuServices() {
-        int menuServiceChoice;
-        do {
-            System.out.println("1. Hiển thị tất cả các dịch vụ");
-            System.out.println("2. Thêm một dịch vụ");
-            System.out.println("3. Sửa một dịch vụ theo tên");
-            System.out.println("4. Xóa một dịch vụ theo tên");
-            System.out.println("0. Thoát");
-            System.out.println("-------------------------------");
-            System.out.print("Chọn đi nào: ");
-            menuServiceChoice = scanner.nextInt();
-            scanner.nextLine();
-            switch (menuServiceChoice) {
-                case 1:
-                    if (!serviceManager.displayService().isEmpty()) {
-                        for (Service service : serviceManager.displayService()) {
-                            System.out.println(service);
-                        }
-                    } else {
-                        System.out.println("Chưa có dịch vụ nào cả huhu");
-                    }
-                    break;
-                case 2:
-                    System.out.print("Nhập tên dịch vụ thêm mới: ");
-                    String serviceNameNew = scanner.nextLine();
-                    System.out.print("Nhập giá dịch vụ thêm mới: ");
-                    double servicePriceNew = scanner.nextDouble();
-                    scanner.nextLine();
-                    serviceManager.addService(serviceNameNew, servicePriceNew);
-                    break;
-                case 3:
-                    System.out.print("Nhập tên dịch vụ cần sửa: ");
-                    String serviceNameEdit = scanner.nextLine();
-                    serviceManager.updateService(serviceNameEdit);
-                    break;
-                case 4:
-                    System.out.print("Nhập tên dịch vụ cần xóa: ");
-                    String serviceNameDelete = scanner.nextLine();
-                    serviceManager.deleteService(serviceNameDelete);
-                    break;
-                case 0:
-                    System.out.println("Bái bai");
-                    break;
-                default:
-                    System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
-                    break;
-            }
-        } while (menuServiceChoice != 0);
-    }
-
-    public void menuRevenue() {
-        int menuRevenueChoice;
-        do {
-            System.out.println("1. Thêm dịch vụ");
-            System.out.println("2. Thanh toán");
-            System.out.println("0. Quay về");
-            System.out.println("---------------");
-            System.out.print("Chọn đi nào: ");
-            menuRevenueChoice = scanner.nextInt();
-            scanner.nextLine();
-            switch (menuRevenueChoice) {
-                case 1:
-                    System.out.print("Nhập ID máy muốn thêm dịch vụ: ");
-                    int idAddServices = scanner.nextInt();
-                    scanner.nextLine();
-                    if (onlineComputer().contains(String.valueOf(idAddServices))) {
-//                        selectService();
-                        cyberManager.addServiceToComputer(idAddServices, selectService());
-                    } else {
-                        System.out.println("Máy đang offline bạn ôi");
-                    }
-                    break;
-                case 2:
-                    System.out.print("Nhập ID muốn thanh toán: ");
-                    int idPayment = scanner.nextInt();
-                    scanner.nextLine();
-                    if (onlineComputer().contains(String.valueOf(idPayment))){
-                        System.out.println("Tổng tiền phải thanh toán là: " + cyberManager.turnOffComputer(idPayment));
-                    }
-                    break;
-                case 0:
-                    System.out.println("Bái bai");
-                    break;
-                default:
-                    System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
-                    break;
-            }
-        } while (menuRevenueChoice != 0);
-    }
-
-    private Service selectService() {
-        int choice;
-        Service serviceAdd = null;
-        for (Service service : serviceManager.displayService()) {
-            System.out.println(service);
-        }
-        System.out.print("Bạn muốn chọn dịch vụ nào: ");
-        String nameService = scanner.nextLine();
-        System.out.println("Số lượng bao nhiêu nhở?");
-        int quantity = scanner.nextInt();
-        for (Service service : serviceManager.displayService()) {
-            if (service.getName().equals(nameService)) {
-                serviceAdd = service;
-                serviceAdd.setQuantity(quantity);
-                System.out.println("Thêm thành công");
-                break;
-            }
-        }
-        if (serviceAdd == null) {
-            System.out.println("Bạn nhập sai rồi đó");
-        }
-        System.out.println("Bạn muốn thêm gì nữa không. Nhấn 1 để thêm, nhấn 0 để thoát");
-        return serviceAdd;
-    }
-
     public void totalPay() {
+        int menuTotalPayChoice;
+        do {
+            System.out.println("1. Tổng doanh thu từ đầu");
+            System.out.println("2. Tổng doanh thu theo ngày");
+            System.out.println("0.Quay lại");
+            System.out.println("------------------");
+            System.out.print("Chọn đi nào: ");
+            menuTotalPayChoice = scanner.nextInt();
+            scanner.nextLine();
+            switch (menuTotalPayChoice){
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 0:
+                    System.out.println("Bái bai");
+                    break;
+                default:
+                    System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
+                    break;
+
+            }
+        } while (menuTotalPayChoice != 0);
 
     }
 
     public String onlineComputer() {
-        String output = "";
-        for (Computer computer : cyberManager.displayComputers()) {
+        StringBuilder outputBuilder = new StringBuilder();
+        for (Computer computer : cyberManager.readComputerToCSV()) {
             if (computer.getStatus().equals("Available")) {
-                output += computer.getId() + " ";
+                outputBuilder.append(computer.getId()).append(" ");
             }
         }
+        String output = outputBuilder.toString();
         if (output.length() == 0) {
             return "Không có máy nào đang bật";
         } else {
@@ -289,16 +164,19 @@ public class MenuDisplay {
     }
 
     public String offlineComputer() {
-        String output = "";
+        StringBuilder outputBuilder = new StringBuilder();
         for (Computer computer : cyberManager.displayComputers()) {
             if (computer.getStatus().equals("Disable")) {
-                output += computer.getId() + " ";
+                outputBuilder.append(computer.getId()).append(" ");
             }
         }
+        String output = outputBuilder.toString();
         if (output.length() == 0) {
             return "Không có máy nào đang tắt";
         } else {
             return output;
         }
     }
+
+
 }

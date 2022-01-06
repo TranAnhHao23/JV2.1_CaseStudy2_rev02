@@ -4,7 +4,6 @@ import model.Computer;
 import model.Service;
 
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class CyberManager {
@@ -18,10 +17,21 @@ public class CyberManager {
         return computers;
     }
 
+    public String displayComputerByID(int id) {
+        if (checkIDComputer(id)) {
+            for (Computer computer : computers) {
+                if (computer.getId()==id){
+                    return computer.displayPlayTime();
+                }
+            }
+        }
+        return "Nhầm ID à?";
+    }
+
     public void addComputer(int id) {
         if (!checkIDComputer(id)) {
             computers.add(new Computer(id));
-            writeComputerToCSV(computers);
+            writeComputerToCSV(displayComputers());
             System.out.println("Thêm vào thành công");
         } else {
             System.out.println("ID đã tồn tại!");
@@ -34,7 +44,7 @@ public class CyberManager {
                 for (Computer computer : computers) {
                     if (computer.getId() == id) {
                         computer.setId(idNew);
-                        writeComputerToCSV(computers);
+                        writeComputerToCSV(displayComputers());
                         System.out.println("Cập nhật thành công");
                         break;
                     }
@@ -47,14 +57,18 @@ public class CyberManager {
         }
     }
 
-    public void deleteComputerByID(int id) {
+    public void deleteComputerByID(int id, int choice) {
         if (checkIDComputer(id)) {
             for (Computer computer : computers) {
                 if (computer.getId() == id) {
-                    computers.remove(computer);
-                    writeComputerToCSV(computers);
-                    System.out.println("Xóa thành công");
-                    break;
+                    if (choice == 1) {
+                        computers.remove(computer);
+                        writeComputerToCSV(displayComputers());
+                        System.out.println("Xóa thành công");
+                        break;
+                    } else if (choice == 0) {
+                        System.out.println("Ô bạn đùa tôi à? Lần nữa là ăn đòn đó");
+                    }
                 }
             }
         } else {
@@ -69,7 +83,7 @@ public class CyberManager {
             Computer.playPrice = price;
             System.out.println("Thay đổi thành công rồi nhớ");
         }
-        writeComputerToCSV(computers);
+        writeComputerToCSV(displayComputers());
     }
 
     public void addServiceToComputer(int id, Service serviceAdd) {
@@ -82,7 +96,6 @@ public class CyberManager {
     }
 
     public void turnOnComputer(int id) {
-//        double totalCash = 0;
         if (checkIDComputer(id)) {
             for (Computer computer : computers) {
                 if (computer.getId() == id) {
@@ -91,7 +104,7 @@ public class CyberManager {
                         computer.setStartTime(System.currentTimeMillis() / 60000);
                         System.out.println(computer.getStatus());
                         System.out.println("Đã mở máy, chơi đi bạn");
-                        writeComputerToCSV(computers);
+                        writeComputerToCSV(displayComputers());
                         break;
                     } else {
                         System.out.println("Máy đang bật, không bật được lần nữa đâu");
@@ -102,6 +115,7 @@ public class CyberManager {
             System.out.println("Không có ID máy trong hệ thống");
         }
     }
+
 
     public double turnOffComputer(int id) {
         double totalCash = 0;
@@ -114,15 +128,16 @@ public class CyberManager {
                         totalCash = computer.totalCash();
                         computer.setStartTime(0);
                         computer.setEndTime(0);
-                        writeComputerToCSV(computers);
+                        computer.setServiceCash(0);
+                        writeComputerToCSV(displayComputers());
                         break;
                     }
                 }
             }
+
         }
         return totalCash;
     }
-
 
     public void writeComputerToCSV(ArrayList<Computer> computerList) {
         try {
@@ -149,7 +164,7 @@ public class CyberManager {
         } else {
             try {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                String line = "";
+                String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     String[] output = line.split(",");
                     computerList.add(new Computer(Integer.parseInt(output[0]), output[1], Long.parseLong(output[2]), Long.parseLong(output[3])));

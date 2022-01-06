@@ -106,9 +106,9 @@ public class AccountManager {
 
     public boolean checkAccountExist(String userName) {
         for (Account account : accounts) {
-            if (account.getUserName().equals(userName)){
+            if (account.getUserName().equals(userName)) {
                 return true;
-            };
+            }
         }
         return false;
     }
