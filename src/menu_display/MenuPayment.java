@@ -16,45 +16,53 @@ public class MenuPayment {
 
     public void menuPayment() {
         int menuRevenueChoice;
-        do {
-            System.out.println("1. Thêm dịch vụ");
-            System.out.println("2. Thanh toán");
-            System.out.println("0. Quay về");
-            System.out.println("---------------");
-            System.out.print("Chọn đi nào: ");
-            menuRevenueChoice = scanner.nextInt();
-            scanner.nextLine();
-            switch (menuRevenueChoice) {
-                case 1:
-                    System.out.print("Nhập ID máy muốn thêm dịch vụ: ");
-                    int idAddServices = scanner.nextInt();
-                    scanner.nextLine();
-                    if (menuDisplay.onlineComputer().contains(String.valueOf(idAddServices))) {
+        boolean check = true;
+        while (check) {
+            try {
+                do {
+                    System.out.println("1. Thêm dịch vụ");
+                    System.out.println("2. Thanh toán");
+                    System.out.println("0. Quay về");
+                    System.out.println("---------------");
+                    System.out.print("Chọn đi nào: ");
+                    menuRevenueChoice = Integer.parseInt(scanner.nextLine());
+//                    scanner.nextLine();
+                    switch (menuRevenueChoice) {
+                        case 1:
+                            System.out.print("Nhập ID máy muốn thêm dịch vụ: ");
+                            int idAddServices = Integer.parseInt(scanner.nextLine());
+//                            scanner.nextLine();
+                            if (menuDisplay.onlineComputer().contains(String.valueOf(idAddServices))) {
 //                        selectService();
-                        cyberManager.addServiceToComputer(idAddServices, selectService());
-                    } else {
-                        System.out.println("Máy đang offline bạn ôi");
+                                cyberManager.addServiceToComputer(idAddServices, selectService());
+                            } else {
+                                System.out.println("Máy đang offline bạn ôi");
+                            }
+                            break;
+                        case 2:
+                            System.out.print("Nhập ID muốn thanh toán: ");
+                            int idPayment = Integer.parseInt(scanner.nextLine());
+//                            scanner.nextLine();
+                            if (menuDisplay.onlineComputer().contains(String.valueOf(idPayment))) {
+                                System.out.println("Tắt máy tính tiền");
+                                System.out.println("Tổng tiền của máy" + idPayment + " = " + cyberManager.turnOffComputer(idPayment));
+                            } else {
+                                System.out.println("Máy đang offline bạn ôi");
+                            }
+                            break;
+                        case 0:
+                            System.out.println("Bái bai");
+                            check = false;
+                            break;
+                        default:
+                            System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
+                            break;
                     }
-                    break;
-                case 2:
-                    System.out.print("Nhập ID muốn thanh toán: ");
-                    int idPayment = scanner.nextInt();
-                    scanner.nextLine();
-                    if (menuDisplay.onlineComputer().contains(String.valueOf(idPayment))) {
-                        System.out.println("Tắt máy tính tiền");
-                        System.out.println("Tổng tiền của máy" + idPayment + " = " + cyberManager.turnOffComputer(idPayment));
-                    }else {
-                        System.out.println("Máy đang offline bạn ôi");
-                    }
-                    break;
-                case 0:
-                    System.out.println("Bái bai");
-                    break;
-                default:
-                    System.out.println("Không có lựa chọn đó cho bạn đâu -_-");
-                    break;
+                } while (menuRevenueChoice != 0);
+            } catch (Exception e){
+                System.err.println("Không có đâu sói ạ");
             }
-        } while (menuRevenueChoice != 0);
+        }
     }
 
     private Service selectService() {

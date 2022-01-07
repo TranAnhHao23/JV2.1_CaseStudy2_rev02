@@ -60,22 +60,24 @@ public class RevenueManager {
 
     public double revenuePeriod(String dateStart, String dateEnd) {
         int firstDateIndex = 0;
-        int lastDateIndex = 0;
+        int lastDateIndex = revenues.size() - 1;
         double revenue = 0;
-        if (checkRevenueDate(dateStart) && checkRevenueDate(dateEnd)) {
+        if (checkRevenueDate(dateStart)) {
             for (int i = 0; i < revenues.size(); i++) {
                 if (convertStringToDate(revenues.get(i).getDate()).compareTo(convertStringToDate(dateStart)) == 0) {
                     firstDateIndex = i;
                 }
+            }
+        }
+        if (checkRevenueDate(dateEnd)) {
+            for (int i = 0; i < revenues.size(); i++) {
                 if (convertStringToDate(revenues.get(i).getDate()).compareTo(convertStringToDate(dateEnd)) == 0) {
-                    lastDateIndex = i;
+                    firstDateIndex = i;
                 }
             }
-            for (int i = firstDateIndex; i <= lastDateIndex; i++) {
-                    revenue += revenues.get(i).getDailyRevenue();
-            }
-        } else {
-            return -1;
+        }
+        for (int i = firstDateIndex; i <= lastDateIndex; i++) {
+            revenue += revenues.get(i).getDailyRevenue();
         }
         return revenue;
     }
@@ -143,6 +145,22 @@ public class RevenueManager {
             }
         }
         return false;
+    }
+
+    public boolean checkStartDate(String date) {
+        if (convertStringToDate(revenues.get(0).getDate()).compareTo(convertStringToDate(date)) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkEndDate(String date) {
+        if (convertStringToDate(revenues.get(revenues.size() - 1).getDate()).compareTo(convertStringToDate(date)) < 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
