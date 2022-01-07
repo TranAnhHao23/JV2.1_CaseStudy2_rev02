@@ -15,6 +15,7 @@ public class ServiceManager {
     }
 
     public ArrayList<Service> displayService() {
+        writeServiceToCSV(services);
         return services;
     }
 
@@ -73,7 +74,7 @@ public class ServiceManager {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH_SERVICE));
             for (Service service : serviceList) {
-                bufferedWriter.write(service.getId() + "," + service.getName()+ "," + service.getPrice());
+                bufferedWriter.write(service.getId() + "," + service.getName() + "," + service.getPrice());
                 bufferedWriter.write("\n");
             }
             bufferedWriter.close();

@@ -1,6 +1,5 @@
 package model;
 
-import java.time.LocalDateTime;
 
 public class Computer {
     private int id;
@@ -104,20 +103,4 @@ public class Computer {
                     '}';
         }
     }
-
-
-//    public class DailyRevenue{
-//        private String date;
-//        private double revenue;
-//
-//        public DailyRevenue() {
-//        }
-//
-//        public DailyRevenue(String date, double revenue) {
-//            this.date = date;
-//            this.revenue = revenue;
-//        }
-//
-//
-//    }
 }
