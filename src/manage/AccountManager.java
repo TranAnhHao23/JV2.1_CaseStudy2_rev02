@@ -92,7 +92,7 @@ public class AccountManager {
         } else {
             try {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                String line = "";
+                String line; // lỡ tay xóa "" không biết có làm sao không
                 while ((line = bufferedReader.readLine()) != null) {
                     String[] output = line.split(",");
                     accountList.add(new Account(output[0], output[1]));
