@@ -26,7 +26,6 @@ public class MenuAccountManager {
                     System.out.println("------------------------------------");
                     System.out.print("Chọn đi nào: ");
                     menuAccountChoice = Integer.parseInt(scanner.nextLine());
-                    scanner.nextLine();
                     switch (menuAccountChoice) {
                         case 1:
                             for (Account account : accountManager.displayAccountManager()) {
