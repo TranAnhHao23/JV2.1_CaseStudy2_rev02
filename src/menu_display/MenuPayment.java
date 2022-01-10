@@ -74,6 +74,7 @@ public class MenuPayment {
         int idService = scanner.nextInt();
         System.out.print("Số lượng bao nhiêu nhở? ");
         int quantity = scanner.nextInt();
+        scanner.nextLine();
         for (Service service : serviceManager.displayService()) {
             if (service.getId() == idService) {
                 serviceAdd = service;

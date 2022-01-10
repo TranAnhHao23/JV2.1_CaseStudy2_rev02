@@ -90,15 +90,15 @@ public class Computer {
     }
 
     public String displayPlayTime() {
-        if (status.equals("Disable")){
+        if (status.equals("Disable")) {
             return toString();
         } else {
             return "Computer {" +
                     "id = " + id +
                     ", status = " + status +
                     ", startTime = " + startTime +
-                    ", durationTime = " + (System.currentTimeMillis()/60000 - startTime) +
-                    ", playFee = " + playPrice*(System.currentTimeMillis()/60000 - startTime) +
+                    ", durationTime = " + (System.currentTimeMillis() / 60000 - startTime) +
+                    ", playFee = " + playPrice * (System.currentTimeMillis() / 60000 - startTime) + " VND" +
                     ", servicesFee = " + serviceCash +
                     '}';
         }

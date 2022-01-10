@@ -35,7 +35,11 @@ public class MenuAccountManager {
                         case 2:
                             System.out.print("Nhập userName cần sửa: ");
                             String userNameUpdate = scanner.nextLine();
-                            accountManager.updateAccountManager(userNameUpdate);
+                            if (checkString(userNameUpdate)) {
+                                accountManager.updateAccountManager(userNameUpdate);
+                            } else {
+                                System.out.println("Không được để trống!!!");
+                            }
                             break;
                         case 3:
                             System.out.print("Nhập userName cần xóa: ");
@@ -62,7 +66,7 @@ public class MenuAccountManager {
                             break;
                     }
                 } while (menuAccountChoice != 0);
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.err.println("Không có đâu sói ạ");
             }
         }
